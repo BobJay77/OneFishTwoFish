@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Player : MonoBehaviour
     public ScannerEffect scannerEffect;
     public bool isGrounded;
     public LayerMask groundLayer;
+    public LayerMask poopLayer;
     public LayerMask enemyLayer;
     
     public Vector2 inputMovementVector;
@@ -40,7 +42,7 @@ public class Player : MonoBehaviour
     {
         if (health <= 0)
         {
-            //sceneswitch to game over
+            SceneManager.LoadScene("GameOver");
         }
         GroundedChecker(); //quick groundcheck
         GravityHandler();
@@ -192,6 +194,13 @@ public class Player : MonoBehaviour
                             transform.position.z);
         isGrounded = Physics.CheckSphere(spherePos, characterController.radius, groundLayer,
                      QueryTriggerInteraction.Ignore);
+
+        Vector3 poopPos = new Vector3(transform.position.x, (transform.position.y) - characterController.height,
+                            transform.position.z);
+        if( Physics.CheckSphere(poopPos, characterController.radius, poopLayer,
+                     QueryTriggerInteraction.Ignore)){
+            health = 0;
+        }
 
     }
 

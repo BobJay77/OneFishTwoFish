@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class PoopNavmesh : MonoBehaviour
 {
@@ -17,5 +18,10 @@ public class PoopNavmesh : MonoBehaviour
     private void Update()
     {
         navMeshAgent.destination = movePositionTransform.position;
+
+        if(navMeshAgent.isStopped)
+        {
+            SceneManager.LoadScene("Win");
+        }
     }
 }
