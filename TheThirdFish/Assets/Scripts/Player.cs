@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public CharacterController characterController;
+    public Scoring scoring;
     public ScannerEffect scannerEffect;
     public bool isGrounded;
     public LayerMask groundLayer;
@@ -12,6 +13,9 @@ public class Player : MonoBehaviour
     public Vector2 inputMovementVector;
     public Vector3 inputAimVector;
     public GameObject mainCamera;
+
+    public Transform hit;
+    public Transform miss;
 
     public float speed = 10;
     public float verticalVelocity = 0;
@@ -32,11 +36,11 @@ public class Player : MonoBehaviour
         GravityHandler();
         InputHandler();
         FinalMovementHandler();
+        
     }
 
     private void LateUpdate()
     {
-        CameraMovement(); 
         inputMovementVector = Vector2.zero;
         speed = 0;
        
@@ -88,6 +92,7 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Cursor.lockState = CursorLockMode.Locked;
+            CollisionHandler();
         }
 
         if(inputMovementVector!= Vector2.zero)
@@ -95,16 +100,52 @@ public class Player : MonoBehaviour
             scannerEffect.scanning = true;
         }
 
+       
+
+    }
+
+    private void CollisionHandler()
+    {
+        Transform hitTransform = null;
+        Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, groundLayer))
+        {
+            hitTransform = raycastHit.transform;
+
+        }
+
+        if (hitTransform != null)
+        {
+            if(hitTransform.GetComponent<Wall>() != null)
+            {
+                StartCoroutine(HitEffect(hit, raycastHit.point));
+                scoring.AddScore(1);
+               
+            }
+            else
+            {
+                StartCoroutine(HitEffect(miss, raycastHit.point));
+            }
+        }
     }
 
     private void FinalMovementHandler()
     {
         Vector3 inputDir = new Vector3(inputMovementVector.x, 0, inputMovementVector.y);
-        float targetRotation = Mathf.Atan2(inputDir.x, inputDir.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-        Vector3 targetMotion = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
 
-        characterController.Move(targetMotion.normalized * (speed * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
+        if (inputDir.magnitude > 0.1)
+        {
+            float targetAngle = mainCamera.transform.eulerAngles.y;
+            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * inputDir;
+            characterController.Move(moveDir.normalized * speed * Time.deltaTime);
+        }
+
+        Vector3 velocity = new Vector3(0, verticalVelocity, 0);
+
+        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void GroundedChecker()
@@ -116,20 +157,12 @@ public class Player : MonoBehaviour
 
     }
 
-    private void CameraMovement()
+    IEnumerator HitEffect(Transform transform, Vector3 point)
     {
-        //float mouseX = Input.GetAxis("Mouse X");
-        //float mouseY = Input.GetAxis("Mouse Y");
-
-        inputAimVector.x += Input.GetAxis("Mouse X");
-        inputAimVector.y += Input.GetAxis("Mouse Y");
-
-        transform.localRotation = Quaternion.Euler(Mathf.Clamp(-inputAimVector.y, -45, 45), inputAimVector.x, 0);
-        //transform.Rotate(Vector3.up, Mathf.Clamp(mouseX * sensitivity, -90, 90));
-
-
-
+        transform.gameObject.SetActive(true);
+        transform.position = point;
+        yield return new WaitForSeconds(2);
+        transform.gameObject.SetActive(false);
+        scoring.AddScore(1);
     }
-
-   
 }
