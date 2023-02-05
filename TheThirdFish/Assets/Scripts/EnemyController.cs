@@ -4,29 +4,45 @@ public class EnemyController : MonoBehaviour
 {
     public float detectRadius = 10f;
     public float moveSpeed = 5f;
-    public float minimumDistance = 1f;
+    private float destroyTime = 5.0f;
+    private float timer = 0.0f;
 
-    private Transform player;
+    public LayerMask pooplayer;
+
+    private Transform poop;
     private Vector3 randomDirection;
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        poop = GameObject.FindWithTag("Poop").transform;
     }
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        float distanceToPlayer = Vector3.Distance(transform.position, poop.position);
 
-        if (distanceToPlayer <= minimumDistance)
+        if (distanceToPlayer <= detectRadius)
         {
-            Destroy(gameObject);
-        }
-        else if (distanceToPlayer <= detectRadius)
-        {
-            Vector3 directionToPlayer = (player.position - transform.position).normalized;
+            Vector3 directionToPlayer = (poop.position - transform.position).normalized;
             randomDirection = directionToPlayer + Random.onUnitSphere * 0.5f;
             transform.position = Vector3.Lerp(transform.position, transform.position + randomDirection, moveSpeed * Time.deltaTime);
         }
+
+        timer += Time.deltaTime;
+        if (timer >= destroyTime)
+        {
+            Destroy(gameObject);
+        }
+
+        SphereCollider collider = GetComponent<SphereCollider>();
+
+        Vector3 spherePos = new Vector3(transform.position.x, transform.position.y,
+                           transform.position.z);
+      if(Physics.CheckSphere(spherePos, collider.radius, pooplayer,
+                     QueryTriggerInteraction.Ignore))
+        {
+            Destroy(gameObject);
+        }
     }
+
 }

@@ -4,6 +4,8 @@ using System.Collections;
 public class SpawnEnemies : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public Transform poop;
+    public float range = 23;
     public float spawnRadius = 5f;
     public float spawnInterval = 5f;
 
@@ -14,7 +16,7 @@ public class SpawnEnemies : MonoBehaviour
 
     private IEnumerator Spawn()
     {
-        while (true)
+        while (Vector3.Distance(poop.position, transform.position) < range)
         {
             Vector3 spawnPosition = transform.position + Random.insideUnitSphere * spawnRadius;
             Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);

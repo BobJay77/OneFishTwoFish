@@ -10,7 +10,7 @@ public class EnemyShooter : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.FindWithTag("Player").transform;
+        playerTransform = GameObject.FindWithTag("Poop").transform;
     }
 
     private void Update()
