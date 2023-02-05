@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public ScannerEffect scannerEffect;
     public bool isGrounded;
     public LayerMask groundLayer;
+    public LayerMask enemyLayer;
     
     public Vector2 inputMovementVector;
     public Vector3 inputAimVector;
@@ -17,33 +18,55 @@ public class Player : MonoBehaviour
     public Transform hit;
     public Transform miss;
 
+    public HealthBar healthbar;
+
+    public float time = 0;
+    public float shootTime = 0;
     public float speed = 10;
     public float verticalVelocity = 0;
     public float gravity = -15.0f;
 
     public float sensitivity = 10;
 
-    public float health = 10;
+    public int health = 10;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        healthbar.SetMaxHealth(health);
     }
 
     private void Update()
     {
+        if (health <= 0)
+        {
+            //sceneswitch to game over
+        }
         GroundedChecker(); //quick groundcheck
         GravityHandler();
         InputHandler();
         FinalMovementHandler();
+        ScoreHandler();
+        healthbar.SetHealth(health);
         
     }
 
     private void LateUpdate()
     {
+        CameraMovement();
         inputMovementVector = Vector2.zero;
         speed = 0;
        
+    }
+
+    private void ScoreHandler()
+    {
+        time += Time.deltaTime;
+        if (time >= 1.5)
+        {
+            scoring.AddScore(1);
+            time = 0;
+        }
     }
 
     private void GravityHandler()
@@ -92,6 +115,8 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Cursor.lockState = CursorLockMode.Locked;
+
+            if (shootTime <= 0) 
             CollisionHandler();
         }
 
@@ -100,16 +125,17 @@ public class Player : MonoBehaviour
             scannerEffect.scanning = true;
         }
 
-       
+        shootTime -= Time.deltaTime;
 
     }
 
     private void CollisionHandler()
     {
+        shootTime = .5f;
         Transform hitTransform = null;
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, groundLayer))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, enemyLayer))
         {
             hitTransform = raycastHit.transform;
 
@@ -117,11 +143,23 @@ public class Player : MonoBehaviour
 
         if (hitTransform != null)
         {
-            if(hitTransform.GetComponent<Wall>() != null)
+            if(hitTransform.GetComponent<EnemyController>() != null)
             {
-                StartCoroutine(HitEffect(hit, raycastHit.point));
+                hitTransform.GetComponent<EnemyController>().health--;
                 scoring.AddScore(1);
+                StartCoroutine(HitEffect(hit, raycastHit.point));
+                
                
+            }
+            else if(hitTransform.GetComponent<EnemyShooter>() != null)
+            {
+                hitTransform.GetComponent<EnemyShooter>().health--;
+                StartCoroutine(HitEffect(hit, raycastHit.point));
+            }
+            else if(hitTransform.GetComponent<SpawnEnemies>() != null)
+            {
+                hitTransform.GetComponent<SpawnEnemies>().health--;
+                StartCoroutine(HitEffect(hit, raycastHit.point));
             }
             else
             {
@@ -157,11 +195,19 @@ public class Player : MonoBehaviour
 
     }
 
+    private void CameraMovement()
+    {
+        inputAimVector.x += Input.GetAxis("Mouse X");
+        inputAimVector.y += Input.GetAxis("Mouse Y");
+
+        transform.localRotation = Quaternion.Euler(Mathf.Clamp(-inputAimVector.y, -90, 90), inputAimVector.x, 0);
+    }
+
     IEnumerator HitEffect(Transform transform, Vector3 point)
     {
         transform.gameObject.SetActive(true);
         transform.position = point;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         transform.gameObject.SetActive(false);
         scoring.AddScore(1);
     }

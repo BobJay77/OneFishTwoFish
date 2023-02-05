@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6557171309494828703}
   - component: {fileID: 6557171309494828702}
   - component: {fileID: 6557171309494828701}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4945,7 +4945,7 @@ GameObject:
   - component: {fileID: 6557171309502399044}
   - component: {fileID: 6557171309502399043}
   - component: {fileID: 6557171309502399042}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9877,7 +9877,7 @@ GameObject:
   - component: {fileID: 6557171309599371742}
   - component: {fileID: 6557171309599371741}
   - component: {fileID: 6557171309599371740}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14809,7 +14809,7 @@ GameObject:
   - component: {fileID: 6557171309680468280}
   - component: {fileID: 6557171309680468263}
   - component: {fileID: 6557171309680468262}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19741,7 +19741,7 @@ GameObject:
   - component: {fileID: 6557171309807748137}
   - component: {fileID: 6557171309807748136}
   - component: {fileID: 6557171309807748567}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24673,7 +24673,7 @@ GameObject:
   - component: {fileID: 6557171310001157155}
   - component: {fileID: 6557171310001157154}
   - component: {fileID: 6557171310001157153}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29605,7 +29605,7 @@ GameObject:
   - component: {fileID: 6557171310046685716}
   - component: {fileID: 6557171310046685715}
   - component: {fileID: 6557171310046685714}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34540,7 +34540,7 @@ GameObject:
   - component: {fileID: 6557171310169151269}
   - component: {fileID: -2049121854984817060}
   - component: {fileID: -8315576760575932803}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -39498,9 +39498,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectRadius: 30
   moveSpeed: 4
+  health: 1
   pooplayer:
     serializedVersion: 2
     m_Bits: 128
+  player: {fileID: 0}
 --- !u!54 &-8315576760575932803
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39530,7 +39532,7 @@ GameObject:
   - component: {fileID: 6557171310401362865}
   - component: {fileID: 6557171310401362864}
   - component: {fileID: 6557171310401362879}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44462,7 +44464,7 @@ GameObject:
   - component: {fileID: 6557171310573803024}
   - component: {fileID: 6557171310573803039}
   - component: {fileID: 6557171310573803038}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49394,7 +49396,7 @@ GameObject:
   - component: {fileID: 6557171310585636544}
   - component: {fileID: 6557171310585636559}
   - component: {fileID: 6557171310585636558}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54326,7 +54328,7 @@ GameObject:
   - component: {fileID: 6557171310587909566}
   - component: {fileID: 6557171310587909565}
   - component: {fileID: 6557171310587909564}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59258,7 +59260,7 @@ GameObject:
   - component: {fileID: 6557171311071143659}
   - component: {fileID: 6557171311071143658}
   - component: {fileID: 6557171311071143657}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Staphylococcus (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

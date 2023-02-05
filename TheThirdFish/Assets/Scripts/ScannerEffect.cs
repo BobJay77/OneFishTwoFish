@@ -8,7 +8,7 @@ public class ScannerEffect : MonoBehaviour
     public Transform ScannerOrigin;
     public Material EffectMaterial;
     public float ScanDistance;
-	public float maxDistance = 50;
+	public float maxDistance = 1;
 
     private Camera _camera;
 
@@ -20,30 +20,12 @@ public class ScannerEffect : MonoBehaviour
         {
 			if (ScanDistance <= maxDistance)
 			{
-				ScanDistance += Time.deltaTime * 50;
+				ScanDistance += Time.deltaTime * 10;
 			}
             else
             {
 				ScanDistance = 0;
 				scanning = false;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.C)) //this would be done in the player code
-        {
-            scanning = true;
-            ScanDistance = 0;
-        }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Ray ray = _camera.ScreenPointToRay(ScannerOrigin.position);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                scanning = true;
-                ScanDistance = 0;
             }
         }
     }
