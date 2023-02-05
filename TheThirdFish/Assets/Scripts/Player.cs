@@ -5,10 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public CharacterController characterController;
+    public ScannerEffect scannerEffect;
     public bool isGrounded;
     public LayerMask groundLayer;
     
     public Vector2 inputMovementVector;
+    public Vector3 inputAimVector;
     public GameObject mainCamera;
 
     public float speed = 10;
@@ -18,7 +20,13 @@ public class Player : MonoBehaviour
     public float sensitivity = 10;
 
     public float health = 10;
-    void Update()
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void Update()
     {
         GroundedChecker(); //quick groundcheck
         GravityHandler();
@@ -52,6 +60,7 @@ public class Player : MonoBehaviour
         {
             inputMovementVector.y = 1;
             speed = 10;
+
         }
 
         else if (Input.GetKey(KeyCode.S))
@@ -70,6 +79,20 @@ public class Player : MonoBehaviour
         {
             inputMovementVector.x = 1;
             speed = 10;
+        }
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        if (Input.GetMouseButton(0))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        if(inputMovementVector!= Vector2.zero)
+        {
+            scannerEffect.scanning = true;
         }
 
     }
@@ -95,8 +118,17 @@ public class Player : MonoBehaviour
 
     private void CameraMovement()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        transform.Rotate(Vector3.up, mouseX * sensitivity);
+        //float mouseX = Input.GetAxis("Mouse X");
+        //float mouseY = Input.GetAxis("Mouse Y");
+
+        inputAimVector.x += Input.GetAxis("Mouse X");
+        inputAimVector.y += Input.GetAxis("Mouse Y");
+
+        transform.localRotation = Quaternion.Euler(Mathf.Clamp(-inputAimVector.y, -45, 45), inputAimVector.x, 0);
+        //transform.Rotate(Vector3.up, Mathf.Clamp(mouseX * sensitivity, -90, 90));
+
+
+
     }
 
    
