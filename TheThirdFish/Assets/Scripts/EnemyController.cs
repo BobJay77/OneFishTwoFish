@@ -7,7 +7,11 @@ public class EnemyController : MonoBehaviour
     private float destroyTime = 5.0f;
     private float timer = 0.0f;
 
+    public int health = 1;
+
     public LayerMask pooplayer;
+
+    public Player player;
 
     private Transform poop;
     private Vector3 randomDirection;
@@ -15,6 +19,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         poop = GameObject.FindWithTag("Poop").transform;
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void Update()
@@ -29,10 +34,11 @@ public class EnemyController : MonoBehaviour
         }
 
         timer += Time.deltaTime;
-        if (timer >= destroyTime)
+        if (timer >= destroyTime || health <= 0) 
         {
             Destroy(gameObject);
         }
+        
 
         SphereCollider collider = GetComponent<SphereCollider>();
 
@@ -41,6 +47,7 @@ public class EnemyController : MonoBehaviour
       if(Physics.CheckSphere(spherePos, collider.radius, pooplayer,
                      QueryTriggerInteraction.Ignore))
         {
+            player.health--;
             Destroy(gameObject);
         }
     }

@@ -7,10 +7,19 @@ public class EnemyShooter : MonoBehaviour
     public float shootingRange = 10.0f;
     private Transform playerTransform;
     private float timeSinceLastShot = 0.0f;
+    public Scoring scoring;
+
+    public LayerMask pooplayer;
+    public Player player;
+
+
+    public float health = 2;
 
     private void Start()
     {
         playerTransform = GameObject.FindWithTag("Poop").transform;
+        scoring = GameObject.Find("Scoring").GetComponent<Scoring>();
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     private void Update()
@@ -25,6 +34,22 @@ public class EnemyShooter : MonoBehaviour
                 timeSinceLastShot = 0.0f;
                 ShootBullet();
             }
+        }
+        if (health <= 0)
+        {
+            scoring.AddScore(1);
+            Destroy(gameObject);
+        }
+
+        SphereCollider collider = GetComponent<SphereCollider>();
+
+        Vector3 spherePos = new Vector3(transform.position.x, transform.position.y,
+                           transform.position.z);
+        if (Physics.CheckSphere(spherePos, collider.radius, pooplayer,
+                       QueryTriggerInteraction.Ignore))
+        {
+            player.health--;
+            Destroy(gameObject);
         }
     }
 
