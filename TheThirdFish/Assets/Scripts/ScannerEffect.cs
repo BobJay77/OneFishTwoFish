@@ -8,16 +8,25 @@ public class ScannerEffect : MonoBehaviour
     public Transform ScannerOrigin;
     public Material EffectMaterial;
     public float ScanDistance;
+	public float maxDistance = 50;
 
     private Camera _camera;
 
-    bool scanning;
+    public bool scanning;
 
     private void Update()
     {
         if (scanning)
         {
-            ScanDistance += Time.deltaTime * 50;
+			if (ScanDistance <= maxDistance)
+			{
+				ScanDistance += Time.deltaTime * 50;
+			}
+            else
+            {
+				ScanDistance = 0;
+				scanning = false;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.C)) //this would be done in the player code
