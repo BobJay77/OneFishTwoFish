@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
 
     private void CollisionHandler()
     {
-        shootTime = .5f;
+        shootTime = .3f;
         Transform hitTransform = null;
         Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);

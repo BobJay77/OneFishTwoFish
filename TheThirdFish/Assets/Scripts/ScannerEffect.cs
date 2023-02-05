@@ -8,22 +8,37 @@ public class ScannerEffect : MonoBehaviour
     public Transform ScannerOrigin;
     public Material EffectMaterial;
     public float ScanDistance;
-	public float maxDistance = 1;
+	public float maxDistance = 2;
 
     private Camera _camera;
 
     public bool scanning;
+	Scannable[] scannables;
+
+    private void Start()
+    {
+		scannables = FindObjectsOfType<Scannable>();
+    }
 
     private void Update()
     {
         if (scanning)
         {
+			scannables = FindObjectsOfType<Scannable>();
 			if (ScanDistance <= maxDistance)
 			{
-				ScanDistance += Time.deltaTime * 10;
+				ScanDistance += Time.deltaTime * 20;
+				
+				foreach (Scannable s in scannables)
+				{
+					if (Vector3.Distance(ScannerOrigin.position, s.transform.position) <= ScanDistance)
+						s.Ping();
+				}
+
 			}
             else
             {
+				
 				ScanDistance = 0;
 				scanning = false;
             }
@@ -32,7 +47,7 @@ public class ScannerEffect : MonoBehaviour
 
     private void OnEnable()
     {
-        _camera = GetComponent<Camera>();
+        _camera = Camera.main.GetComponent<Camera>();
         _camera.depthTextureMode = DepthTextureMode.Depth;
     }
 
